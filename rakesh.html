@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tourism / Travel Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --primary: #0ea5e9;
+      --primary-dark: #0284c7;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --danger: #dc2626;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 26px 16px 40px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+    }
+    header p {
+      margin: 0;
+      opacity: 0.95;
+      font-size: 14px;
+    }
+
+    nav {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    nav .inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      gap: 16px;
+      padding: 10px 16px;
+      overflow-x: auto;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+    nav a:hover {
+      background: #f1f5f9;
+    }
+    nav a.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto 60px;
+      padding: 20px 16px 0;
+    }
+
+    section {
+      margin-bottom: 40px;
+    }
+    section h2 {
+      font-size: 22px;
+      margin: 0 0 14px;
+    }
+    section p.lead {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 6px 18px rgba(2, 6, 23, 0.04);
+    }
+
+    /* Packages grid */
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 950px) {
+      .packages-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .packages-grid { grid-template-columns: 1fr; }
+    }
+
+    .package-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .package-img {
+      height: 150px;
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .package-body {
+      padding: 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .package-title {
+      font-weight: 700;
+      font-size: 16px;
+      margin: 0 0 6px;
+    }
+    .package-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .package-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0 0 10px;
+      flex: 1;
+    }
+    .package-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .package-price {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--primary);
+    }
+    .book-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .book-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Booking form */
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin: 10px 0 4px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      background: #fff;
+      color: var(--text);
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: 2px solid var(--primary);
+      border-color: transparent;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 600px) {
+      .row { grid-template-columns: 1fr; }
+    }
+
+    button.primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 11px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 12px;
+      width: 100%;
+    }
+    button.primary:hover {
+      background: var(--primary-dark);
+    }
+    button.secondary {
+      background: #e2e8f0;
+      color: var(--text);
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    button.secondary:hover {
+      background: #cbd5e1;
+    }
+    button.danger {
+      background: var(--danger);
+      color: white;
+    }
+    button.danger:hover {
+      background: #b91c1c;
+    }
+
+    .booking-item {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #fafafa;
+    }
+    .booking-item .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .booking-item .top .title {
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .booking-item .meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .booking-item .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .booking-item .actions button {
+      margin-top: 0;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 16px;
+    }
+
+    .note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    /* Testimonials */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 950px) {
+      .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .testimonials-grid { grid-template-columns: 1fr; }
+    }
+    .testimonial-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .testimonial-name {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .testimonial-text {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    /* Simple gallery */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 800px) {
+      .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 550px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .gallery-item {
+      aspect-ratio: 4/3;
+      background: #e2e8f0;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 12px;
+      border: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Tourism / Travel Management Website</h1>
+    <p>Student project: browse packages, book tours, view bookings & testimonials</p>
+  </header>
+
+  <nav>
+    <div class="inner">
+      <a href="#home" class="nav-link active">Home</a>
+      <a href="#packages" class="nav-link">Packages</a>
+      <a href="#booking" class="nav-link">Book Now</a>
+      <a href="#mybookings" class="nav-link">My Bookings</a>
+      <a href="#gallery" class="nav-link">Gallery</a>
+      <a href="#testimonials" class="nav-link">Testimonials</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- HOME -->
+    <section id="home">
+      <h2>Welcome to TravelEase</h2>
+      <p class="lead">
+        Explore curated tour packages across hills, beaches, spiritual places, and adventure destinations.
+        This is a demo travel management website for Web Technology projects. [92][95][97][100]
+      </p>
+      <div class="card">
+        <strong>Highlights:</strong>
+        <ul style="margin:6px 0 0 18px; font-size:14px; color:var(--muted);">
+          <li>Browse and compare tour packages with price, duration, and highlights. [95][100]</li>
+          <li>Book a package with traveler details and preferred travel date. [91][94][99]</li>
+          <li>View your bookings stored in your browser (localStorage). [95][102]</li>
+          <li>Sample testimonials and photo gallery for presentation. [97][100]</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PACKAGES -->
+    <section id="packages">
+      <h2>Tour Packages</h2>
+      <p class="lead">Choose a package and click “Book Now” to fill the booking form.</p>
+      <div class="packages-grid" id="packagesGrid">
+        <!-- Packages injected by JS -->
+      </div>
+    </section>
+
+    <!-- BOOKING FORM -->
+    <section id="booking">
+      <h2>Book a Package</h2>
+      <p class="lead">Fill in your details and preferred travel date. All data stays in your browser.</p>
+      <div class="card">
+        <form id="bookingForm">
+          <label for="selectedPackage">Selected Package</label>
+          <select id="selectedPackage" required>
+            <option value="">-- Choose a package --</option>
+            <!-- Options from JS -->
+          </select>
+
+          <label for="travelerName">Traveler Name</label>
+          <input id="travelerName" required placeholder="e.g. Priya Sharma" />
+
+          <div class="row">
+            <div>
+              <label for="email">Email</label>
+              <input id="email" type="email" required placeholder="you@example.com" />
+            </div>
+            <div>
+              <label for="phone">Phone</label>
+              <input id="phone" type="tel" required placeholder="9876543210" pattern="[0-9]{10}" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="travelDate">Preferred Travel Date</label>
+              <input id="travelDate" type="date" required />
+            </div>
+            <div>
+              <label for="travelers">Number of Travelers</label>
+              <input id="travelers" type="number" min="1" max="20" value="2" required />
+            </div>
+          </div>
+
+          <label for="specialRequests">Special Requests (optional)</label>
+          <textarea id="specialRequests" rows="3" placeholder="Room preference, extra pickup point, etc."></textarea>
+
+          <button type="submit" class="primary">Confirm Booking</button>
+          <p class="note">This is a demo; no payment or server is used. Data is stored only in your browser (localStorage). [90][96][98][101][104][107]</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- MY BOOKINGS -->
+    <section id="mybookings">
+      <h2>My Bookings</h2>
+      <p class="lead">View and cancel your bookings (stored locally in this browser).</p>
+      <div class="card" id="bookingsCard">
+        <div id="bookingsList">
+          <div class="empty">No bookings yet. Make your first booking above.</div>
+        </div>
+        <button id="clearAllBtn" class="secondary danger" style="display:none; margin-top:10px;">Clear All Bookings</button>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery">
+      <h2>Photo Gallery</h2>
+      <p class="lead">Sample gallery images for presentation (placeholders).</p>
+      <div class="gallery-grid">
+        <div class="gallery-item">Hills</div>
+        <div class="gallery-item">Beach</div>
+        <div class="gallery-item">Temple</div>
+        <div class="gallery-item">Adventure</div>
+        <div class="gallery-item">City Tour</div>
+        <div class="gallery-item">Forest</div>
+        <div class="gallery-item">Lake</div>
+        <div class="gallery-item">Desert</div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+      <h2>Testimonials</h2>
+      <p class="lead">What our travelers say (sample data for project demo). [97][100]</p>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-name">Arun K.</div>
+          <p class="testimonial-text">Amazing hill station package. Hotels and transport were well managed.</p>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-name">Sneha M.</div>
+          <p class="testimonial-text">Loved the spiritual tour. Guide was knowledgeable and friendly.</p>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-name">Rahul P.</div>
+          <p class="testimonial-text">Adventure package was thrilling. Good value for money.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p class="lead">For project demo purposes only.</p>
+      <div class="card">
+        <p style="margin:0; font-size:14px; color:var(--muted);">
+          Email: info@travelease.demo<br />
+          Phone: +91 9876543210<br />
+          Address: 123, Main Road, Chennai, Tamil Nadu (demo address).
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // --- Tour packages data ---
+    const packages = [
+      {
+        id: "manali",
+        title: "Manali Hill Special",
+        duration: "5 Days / 4 Nights",
+        price: 12999,
+        desc: "Scenic hill station tour with Solang Valley, Rohtang Pass, and local sightseeing.",
+        imgText: "Manali Hills"
+      },
+      {
+        id: "goa",
+        title: "Goa Beach Escape",
+        duration: "4 Days / 3 Nights",
+        price: 9999,
+        desc: "Relax on beaches, enjoy water sports, and explore Old Goa churches.",
+        imgText: "Goa Beach"
+      },
+      {
+        id: "shirdi",
+        title: "Shirdi Spiritual Darshan",
+        duration: "2 Days / 1 Night",
+        price: 3499,
+        desc: "Quick spiritual trip to Shirdi Sai Baba temple with comfortable stay.",
+        imgText: "Shirdi Temple"
+      },
+      {
+        id: "ooty",
+        title: "Ooty & Kodaikanal",
+        duration: "6 Days / 5 Nights",
+        price: 15999,
+        desc: "Twin hill station tour with botanical gardens, lakes, and viewpoints.",
+        imgText: "Ooty Hills"
+      },
+      {
+        id: "rajasthan",
+        title: "Royal Rajasthan Tour",
+        duration: "7 Days / 6 Nights",
+        price: 18999,
+        desc: "Jaipur, Udaipur, and Jodhpur with forts, palaces, and cultural shows.",
+        imgText: "Rajasthan Forts"
+      },
+      {
+        id: "kerala",
+        title: "Kerala Backwaters & Beaches",
+        duration: "6 Days / 5 Nights",
+        price: 16999,
+        desc: "Alleppey houseboat, Munnar tea gardens, and Kovalam beach.",
+        imgText: "Kerala Backwaters"
+      }
+    ];
+
+    const packagesGrid = document.getElementById("packagesGrid");
+    const selectedPackageSelect = document.getElementById("selectedPackage");
+    const bookingForm = document.getElementById("bookingForm");
+    const bookingsList = document.getElementById("bookingsList");
+    const clearAllBtn = document.getElementById("clearAllBtn");
+
+    // --- Render packages ---
+    function renderPackages() {
+      packagesGrid.innerHTML = "";
+      selectedPackageSelect.innerHTML = '<option value="">-- Choose a package --</option>';
+
+      packages.forEach(pkg => {
+        // Grid card
+        const card = document.createElement("div");
+        card.className = "package-card";
+
+        const img = document.createElement("div");
+        img.className = "package-img";
+        img.textContent = pkg.imgText;
+
+        const body = document.createElement("div");
+        body.className = "package-body";
+
+        const title = document.createElement("div");
+        title.className = "package-title";
+        title.textContent = pkg.title;
+
+        const meta = document.createElement("div");
+        meta.className = "package-meta";
+        meta.textContent = `${pkg.duration} • From ₹${pkg.price.toLocaleString("en-IN")}`;
+
+        const desc = document.createElement("p");
+        desc.className = "package-desc";
+        desc.textContent = pkg.desc;
+
+        const footer = document.createElement("div");
+        footer.className = "package-footer";
+
+        const price = document.createElement("div");
+        price.className = "package-price";
+        price.textContent = `₹${pkg.price.toLocaleString("en-IN")}`;
+
+        const bookBtn = document.createElement("button");
+        bookBtn.className = "book-btn";
+        bookBtn.textContent = "Book Now";
+        bookBtn.onclick = () => {
+          selectedPackageSelect.value = pkg.id;
+          document.getElementById("booking").scrollIntoView({ behavior: "smooth" });
+        };
+
+        footer.appendChild(price);
+        footer.appendChild(bookBtn);
+
+        body.appendChild(title);
+        body.appendChild(meta);
+        body.appendChild(desc);
+        body.appendChild(footer);
+
+        card.appendChild(img);
+        card.appendChild(body);
+        packagesGrid.appendChild(card);
+
+        // Select option
+        const opt = document.createElement("option");
+        opt.value = pkg.id;
+        opt.textContent = `${pkg.title} (₹${pkg.price.toLocaleString("en-IN")})`;
+        selectedPackageSelect.appendChild(opt);
+      });
+    }
+
+    // --- Storage (localStorage) ---
+    function loadBookings() {
+      const raw = localStorage.getItem("travelBookings");
+      if (!raw) return [];
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return [];
+      }
+    }
+
+    function saveBookings(bookings) {
+      localStorage.setItem("travelBookings", JSON.stringify(bookings));
+    }
+
+    function renderBookings() {
+      const bookings = loadBookings();
+      bookingsList.innerHTML = "";
+      if (bookings.length === 0) {
+        bookingsList.innerHTML = '<div class="empty">No bookings yet. Make your first booking above.</div>';
+        clearAllBtn.style.display = "none";
+        return;
+      }
+      clearAllBtn.style.display = "inline-block";
+
+      bookings.forEach((b, idx) => {
+        const item = document.createElement("div");
+        item.className = "booking-item";
+
+        const top = document.createElement("div");
+        top.className = "top";
+
+        const title = document.createElement("div");
+        title.className = "title";
+        title.textContent = `${b.packageTitle} • ${b.travelerName}`;
+
+        const actionsTop = document.createElement("div");
+        actionsTop.className = "actions";
+
+        const viewBtn = document.createElement("button");
+        viewBtn.className = "secondary";
+        viewBtn.textContent = "View";
+        viewBtn.onclick = () => alert(
+          `Booking #${idx + 1}\n\n` +
+          `Package: ${b.packageTitle}\n` +
+          `Traveler: ${b.travelerName}\n` +
+          `Email: ${b.email}\nPhone: ${b.phone}\n` +
+          `Travel Date: ${b.travelDate}\n` +
+          `Travelers: ${b.travelers}\n` +
+          `Total Est.: ₹${b.totalEstimate.toLocaleString("en-IN")}\n` +
+          (b.specialRequests ? `Special: ${b.specialRequests}` : "")
+        );
+
+        const cancelBtn = document.createElement("button");
+        cancelBtn.className = "danger";
+        cancelBtn.textContent = "Cancel";
+        cancelBtn.onclick = () => {
+          if (!confirm("Cancel this booking?")) return;
+          const list = loadBookings();
+          list.splice(idx, 1);
+          saveBookings(list);
+          renderBookings();
+        };
+
+        actionsTop.appendChild(viewBtn);
+        actionsTop.appendChild(cancelBtn);
+
+        top.appendChild(title);
+        top.appendChild(actionsTop);
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        meta.textContent = `${b.travelDate} • ${b.travelers} traveler(s) • Est. ₹${b.totalEstimate.toLocaleString("en-IN")}`;
+
+        item.appendChild(top);
+        item.appendChild(meta);
+        bookingsList.appendChild(item);
+      });
+    }
+
+    // --- Booking form logic ---
+    bookingForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const pkgId = selectedPackageSelect.value;
+      const travelerName = document.getElementById("travelerName").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const travelDate = document.getElementById("travelDate").value;
+      const travelers = parseInt(document.getElementById("travelers").value, 10);
+      const specialRequests = document.getElementById("specialRequests").value.trim();
+
+      if (!pkgId) {
+        alert("Please select a package.");
+        return;
+      }
+      if (!travelerName || !email || !phone || !travelDate || !travelers) {
+        alert("Please fill all required fields.");
+        return;
+      }
+      if (travelers <= 0) {
+        alert("Number of travelers must be at least 1.");
+        return;
+      }
+
+      const pkg = packages.find(p => p.id === pkgId);
+      if (!pkg) {
+        alert("Invalid package selected.");
+        return;
+      }
+
+      const totalEstimate = pkg.price * travelers;
+
+      const booking = {
+        packageId: pkg.id,
+        packageTitle: pkg.title,
+        travelerName,
+        email,
+        phone,
+        travelDate,
+        travelers,
+        specialRequests,
+        totalEstimate,
+        bookedAt: new Date().toISOString()
+      };
+
+      const bookings = loadBookings();
+      bookings.unshift(booking);
+      saveBookings(bookings);
+
+      bookingForm.reset();
+      renderBookings();
+      alert("Booking confirmed! Check 'My Bookings' section.");
+      document.getElementById("mybookings").scrollIntoView({ behavior: "smooth" });
+    });
+
+    clearAllBtn.addEventListener("click", () => {
+      if (!confirm("Clear ALL bookings? This cannot be undone.")) return;
+      saveBookings([]);
+      renderBookings();
+    });
+
+    // --- Simple nav active state ---
+    const navLinks = document.querySelectorAll(".nav-link");
+    const sections = document.querySelectorAll("section");
+
+    function updateActiveNav() {
+      let currentId = "";
+      sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        if (rect.top <= 120 && rect.bottom >= 120) {
+          currentId = sec.id;
+        }
+      });
+      navLinks.forEach(link => {
+        link.classList.remove("active");
+        if (link.getAttribute("href") === "#" + currentId) {
+          link.classList.add("active");
+        }
+      });
+    }
+
+    window.addEventListener("scroll", updateActiveNav);
+    window.addEventListener("load", () => {
+      renderPackages();
+      renderBookings();
+      updateActiveNav();
+      // Set min date to today
+      const today = new Date().toISOString().slice(0, 10);
+      document.getElementById("travelDate").setAttribute("min", today);
+    });
+  </script>
+</body>
+</html>
+
